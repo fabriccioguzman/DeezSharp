@@ -4,8 +4,12 @@ using System.Text;
 namespace DeezSharp.Helpers
 {
     internal static class DeezerUtils
-    {
-	    public static string GetDownloadUrl(string md5Origin, int id, int format, int mediaVersion)
+	{
+
+		public static string GetDownloadUrl(DeezerSong s, SongQuality format) 
+			=> GetDownloadUrl(s.OriginMd5, s.SongId, s.MediaVersion, (int)format);
+
+		public static string GetDownloadUrl(string md5Origin, int id, int mediaVersion, int format)
 	    {
 			string str = $"{md5Origin}¤{format}¤{id}¤{mediaVersion}";
 		    str = $"{CryptoHelper.HashMD5(str)}¤{str}¤";

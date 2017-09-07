@@ -27,18 +27,38 @@ namespace DeezSharp
 			_token = m.Groups[1].Value;
 		}
 
-		public void GetTrack(int id)
+		public void SaveTrack(DeezerSong s, string directory, SongQuality quality = SongQuality.MP3_320)
+		{
+			string ext;
+			switch (quality) {
+				case SongQuality.M4A_96:
+					ext = "m4a";
+					break;
+				case SongQuality.FLAC:
+					ext = "flac";
+					break;
+				case SongQuality.MP3_128:
+				case SongQuality.MP3_320:
+				default:
+					ext = "mp3";
+					break;
+			}
+
+			byte[] data = DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId);
+
+			if (!Directory.Exists(directory))
+				Directory.CreateDirectory(directory);
+
+			string path = Path.Combine(directory, $"{s.ArtistName} - {s.SongTitle}.{ext}");
+			File.WriteAllBytes(path, data);
+		}
+
+		public DeezerSong GetTrack(int id)
 		{
 			JToken song = QueryTrack(id);
 			Debug.Assert((int)song["SNG_ID"] == id);
 
-			string origin = (string)song["MD5_ORIGIN"];
-			int mVer = (int)song["MEDIA_VERSION"];
-
-			string url = DeezerUtils.GetDownloadUrl(origin, id, 3, mVer);
-			byte[] rawEncrypted = Web.DownloadData(url);
-			byte[] raw = DeezerUtils.DecryptSongData(rawEncrypted, id);
-			File.WriteAllBytes("song.mp3", raw);
+			return new DeezerSong(song);
 		}
 
 		private JToken QueryTrack(int id)
@@ -48,7 +68,7 @@ namespace DeezSharp
 				method = "song.getListData",
 				@params = new Dictionary<string, object> { { "sng_ids", new[] { id } } }
 			};
-			var queryString = JsonConvert.SerializeObject(new[] { query });
+			string queryString = JsonConvert.SerializeObject(new[] { query });
 
 			string responseString = Web.UploadString($"{Constants.UrlApi}?api_version=1.0&api_token={_token}&input=3", queryString);
 			JToken response = ((JArray)JsonConvert.DeserializeObject(responseString))[0];

@@ -12,12 +12,13 @@ namespace TestCli
 	    {
 	        Console.WriteLine("DeezSharp test project\n");
 
-	        Console.WriteLine("Creating Deezer object...");
 	        var d = new Deezer();
 	        Console.WriteLine("Initializing API...");
 			d.Init();
-	        Console.WriteLine("Getting track...");
-			d.GetTrack(SampleId);
+	        Console.WriteLine("Getting track info...");
+			DeezerSong s = d.GetTrack(SampleId);
+		    Console.WriteLine("Downloading FLAC track...");
+			d.SaveTrack(s, ".", SongQuality.FLAC);
         }
     }
 }
