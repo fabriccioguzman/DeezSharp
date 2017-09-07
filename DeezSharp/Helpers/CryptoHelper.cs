@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
 
 namespace DeezSharp.Helpers
 {
@@ -11,11 +14,10 @@ namespace DeezSharp.Helpers
     {
 		private static readonly Encoding Latin1Encoding = Encoding.GetEncoding("ISO-8859-1");
 	    private static readonly Encoding UTF8Encoding = Encoding.UTF8;
-
-
+		
 		public static string HashMD5(string input)  => string.Join(string.Empty, HashMD5Raw(input).Select(a => a.ToString("x2")));
-	    public static byte[] HashMD5Raw(string input) => HashMD5Raw(Latin1Encoding.GetBytes(input));
 
+	    public static byte[] HashMD5Raw(string input) => HashMD5Raw(Latin1Encoding.GetBytes(input));
 		public static byte[] HashMD5Raw(byte[] input) => MD5.Create().ComputeHash(input);
 
 	    public static string EncryptAes128(string input, string key, string iv) 
@@ -40,6 +42,24 @@ namespace DeezSharp.Helpers
 				Debug.Assert(l == buffer.Length);
 			    return buffer;
 		    }
+	    }
+
+		public static byte[] DecryptBlowfishCbc(byte[] input, byte[] key, byte[] iv)
+		{
+			var cipher = new BufferedBlockCipher(new CbcBlockCipher(new BlowfishEngine()));
+			cipher.Init(false, new ParametersWithIV(new KeyParameter(key), iv));
+			return cipher.ProcessBytes(input);
+		}
+
+		public static byte[] Xor(byte[] source, params byte[][] extra)
+	    {
+			byte[] ret = source;
+
+		    for (int i = 0; i < ret.Length; i++)
+			    foreach (byte[] e in extra)
+				    ret[i] ^= e[i];
+
+		    return ret;
 	    }
     }
 }

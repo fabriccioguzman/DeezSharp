@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using DeezSharp.Helpers;
@@ -34,7 +35,10 @@ namespace DeezSharp
 			string origin = (string)song["MD5_ORIGIN"];
 			int mVer = (int)song["MEDIA_VERSION"];
 
-			var url = DeezerUtils.GetDownloadUrl(origin, id, 3, mVer);
+			string url = DeezerUtils.GetDownloadUrl(origin, id, 3, mVer);
+			byte[] rawEncrypted = Web.DownloadData(url);
+			byte[] raw = DeezerUtils.DecryptSongData(rawEncrypted, id);
+			File.WriteAllBytes("song.mp3", raw);
 		}
 
 		private JToken QueryTrack(int id)
