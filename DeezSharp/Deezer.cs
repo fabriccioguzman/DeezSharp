@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
 using DeezSharp.Helpers;
@@ -28,7 +29,12 @@ namespace DeezSharp
 		public void GetTrack(int id)
 		{
 			JToken song = QueryTrack(id);
+			Debug.Assert((int)song["SNG_ID"] == id);
 
+			string origin = (string)song["MD5_ORIGIN"];
+			int mVer = (int)song["MEDIA_VERSION"];
+
+			var url = DeezerUtils.GetDownloadUrl(origin, id, 3, mVer);
 		}
 
 		private JToken QueryTrack(int id)
