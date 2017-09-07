@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using DeezSharp.Helpers;
 using DeezSharp.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DeezSharp
 {
@@ -26,13 +27,27 @@ namespace DeezSharp
 
 		public void GetTrack(int id)
 		{
-			var query = new DeezerMethodRequest {
-				method = "song.getListData",
-				@params = new Dictionary<string, object> { {"sng_ids", new[] {id} } }
-			};
-			var queryString = JsonConvert.SerializeObject(new[] {query});
+			JToken song = QueryTrack(id);
 
-			string response = Web.UploadString($"{Constants.UrlApi}?api_version=1.0&api_token={_token}&input=3", queryString);
+		}
+
+		private JToken QueryTrack(int id)
+		{
+			var query = new DeezerMethodRequest
+			{
+				method = "song.getListData",
+				@params = new Dictionary<string, object> { { "sng_ids", new[] { id } } }
+			};
+			var queryString = JsonConvert.SerializeObject(new[] { query });
+
+			string responseString = Web.UploadString($"{Constants.UrlApi}?api_version=1.0&api_token={_token}&input=3", queryString);
+			JToken response = ((JArray)JsonConvert.DeserializeObject(responseString))[0];
+
+			if (response["error"].HasValues)
+				throw new Exception("Deezer reported back an error. " + response["error"].First);
+
+			JToken results = response["results"]["data"][0];    //only support single queries for now
+			return results;
 		}
 	}
 }
