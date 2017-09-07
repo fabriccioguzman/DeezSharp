@@ -9,7 +9,7 @@ namespace TestCli
 	    private const int SampleId = 372123951;
 
 	    private static void Main(string[] args)
-        {
+	    {
 	        Console.WriteLine("DeezSharp test project\n");
 
 	        Console.WriteLine("Creating Deezer object...");

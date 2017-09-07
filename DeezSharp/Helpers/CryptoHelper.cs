@@ -13,10 +13,10 @@ namespace DeezSharp.Helpers
 	    private static readonly Encoding UTF8Encoding = Encoding.UTF8;
 
 
-		public static string HashMD5(string input) 
-			=> string.Join(string.Empty, HashMD5(Latin1Encoding.GetBytes(input)).Select(a => a.ToString("x2")));
+		public static string HashMD5(string input)  => string.Join(string.Empty, HashMD5Raw(input).Select(a => a.ToString("x2")));
+	    public static byte[] HashMD5Raw(string input) => HashMD5Raw(Latin1Encoding.GetBytes(input));
 
-	    public static byte[] HashMD5(byte[] input) => MD5.Create().ComputeHash(input);
+		public static byte[] HashMD5Raw(byte[] input) => MD5.Create().ComputeHash(input);
 
 	    public static string EncryptAes128(string input, string key, string iv) 
 			=> string.Join(string.Empty, EncryptAes128(
