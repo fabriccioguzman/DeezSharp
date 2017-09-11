@@ -5,11 +5,11 @@ namespace TestCli
 {
 	internal class Program
     {
-	    private const string SampleUrl = "http://www.deezer.com/track/372123951";
-	    private const int SampleId = 372123951;
+	    private const int SampleSong = 372123951;
+        private const int SampleAlbum = 15218775;
         private const SongQuality Quality = SongQuality.MP3_128;
 
-        private const string Action = "song";
+        private const string Action = "album";
 
 	    private static void Main(string[] args)
 	    {
@@ -22,12 +22,28 @@ namespace TestCli
 	        switch (Action) {
 	            case "song": {
 	                Console.WriteLine("Getting track info...");
-	                DeezerSong s = d.GetTrack(SampleId);
+	                DeezerSong s = d.GetTrack(SampleSong);
 	                Console.WriteLine($"Downloading {Quality} track...");
 	                d.SaveTrack(s, ".", Quality);
 	                break;
 	            }
+	            case "album": {
+	                Console.WriteLine("Getting info from album...");
+	                DeezerAlbum a = d.GetAlbumInfo(SampleAlbum);
+	                Console.WriteLine($"Album '{a.AlbumName}' has {a.AmountOfTracks} tracks, totalling {new TimeSpan(0, 0, a.TotalLength)} of listening joy!");
+                    /*
+                    foreach (DeezerSong song in d.GetAlbumTracks(SampleAlbum)) {
+	                    Console.Write($"[{song.TrackNumber.ToString().PadLeft(2)}] Downloading track \"{song.SongTitle}\" at quality {Quality}...");
+                        d.SaveTrack(song, "album", Quality);
+	                }*/
+                    break;
+	            }
 	        }
-        }
+	        Console.WriteLine("Done!");
+
+#if DEBUG
+	        Console.Read();
+#endif
+	    }
     }
 }

@@ -69,6 +69,14 @@ namespace DeezSharp
             return QueryTrack(id).Select(token => new DeezerSong(token));
         }
 
+        //TODO: rename to GetAlbum when DeezerSongLite is implemented
+	    public DeezerAlbum GetAlbumInfo(int albumId)
+	    {
+	        JToken token = QueryAlbum(albumId);
+            Debug.Assert((int)token["id"] == albumId);
+            return new DeezerAlbum(token);
+	    }
+
 		private IEnumerable<JToken> QueryTrack(params int[] id)
 		{
 			var query = new DeezerMethodRequest
@@ -79,12 +87,18 @@ namespace DeezSharp
 			string queryString = JsonConvert.SerializeObject(new[] { query });
 
 			string responseString = Web.UploadString($"{Constants.UrlApi}?api_version=1.0&api_token={_token}&input=3", queryString);
-			JToken response = ((JArray)JsonConvert.DeserializeObject(responseString))[0];
+			JToken response = JsonConvert.DeserializeObject<JArray>(responseString)[0];
 
 			if (response["error"].HasValues)
 				throw new Exception("Deezer reported back an error. " + response["error"].First);
 
 		    return response["results"]["data"].Children();
 		}
+
+	    private JToken QueryAlbum(int id)
+	    {
+	        string responseString = Web.DownloadString($"{Constants.UrlPublicApi}/album/{id}");
+	        return JsonConvert.DeserializeObject<JToken>(responseString);
+	    }
 	}
 }
