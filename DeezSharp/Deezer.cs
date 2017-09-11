@@ -55,22 +55,26 @@ namespace DeezSharp
 
 			string path = Path.Combine(directory, $"{s.ArtistName} - {$"{s.SongTitle} {s.Version}".TrimEnd(' ')}.{ext}");
 			File.WriteAllBytes(path, data);
-		}
+	    }
 
-		public DeezerSong GetTrack(int id)
-		{
-			JToken song = QueryTrack(id);
-			Debug.Assert((int)song["SNG_ID"] == id);
+	    public DeezerSong GetTrack(int id)
+	    {
+	        JToken token = QueryTrack(id).First();
+            Debug.Assert((int)token["SNG_ID"] == id);
+	        return new DeezerSong(token);
+	    }
 
-			return new DeezerSong(song);
-		}
+        public IEnumerable<DeezerSong> GetTracks(int[] id)
+        {
+            return QueryTrack(id).Select(token => new DeezerSong(token));
+        }
 
-		private JToken QueryTrack(int id)
+		private IEnumerable<JToken> QueryTrack(params int[] id)
 		{
 			var query = new DeezerMethodRequest
 			{
 				method = "song.getListData",
-				@params = new Dictionary<string, object> { { "sng_ids", new[] { id } } }
+				@params = new Dictionary<string, object> { { "sng_ids", id } }
 			};
 			string queryString = JsonConvert.SerializeObject(new[] { query });
 
@@ -80,8 +84,7 @@ namespace DeezSharp
 			if (response["error"].HasValues)
 				throw new Exception("Deezer reported back an error. " + response["error"].First);
 
-			JToken results = response["results"]["data"][0];    //only support single queries for now
-			return results;
+		    return response["results"]["data"].Children();
 		}
 	}
 }

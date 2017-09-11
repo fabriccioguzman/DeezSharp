@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeezSharp.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace DeezSharp

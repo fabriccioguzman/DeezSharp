@@ -9,6 +9,8 @@ namespace TestCli
 	    private const int SampleId = 372123951;
         private const SongQuality Quality = SongQuality.MP3_128;
 
+        private const string Action = "song";
+
 	    private static void Main(string[] args)
 	    {
 	        Console.WriteLine("DeezSharp test project\n");
@@ -16,10 +18,16 @@ namespace TestCli
 	        var d = new Deezer();
 	        Console.WriteLine("Initializing API...");
 			d.Init();
-	        Console.WriteLine("Getting track info...");
-			DeezerSong s = d.GetTrack(SampleId);
-		    Console.WriteLine($"Downloading {Quality} track...");
-			d.SaveTrack(s, ".", Quality);
+
+	        switch (Action) {
+	            case "song": {
+	                Console.WriteLine("Getting track info...");
+	                DeezerSong s = d.GetTrack(SampleId);
+	                Console.WriteLine($"Downloading {Quality} track...");
+	                d.SaveTrack(s, ".", Quality);
+	                break;
+	            }
+	        }
         }
     }
 }
