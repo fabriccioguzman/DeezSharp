@@ -6,9 +6,11 @@ namespace DeezSharp
     public class DeezerSongLite
     {
         public int SongId => _song.Value<int>("id");
-        public string Title => _song.Value<string>("title");
-        public string TitleShort => _song.Value<string>("title_short");     //title minus version
-        public string TitleVersion => _song.Value<string>("title_version"); //title minus actual title
+
+        public string SongTitle => _song.Value<string>("title");
+        public string SongTitleShort => _song.Value<string>("title_short");     //title minus version
+        public string SongTitleVersion => _song.Value<string>("title_version"); //title minus actual title
+
         public string ISRC => _song.Value<string>("isrc");
         public string Link => _song.Value<string>("link");
         public int Duration => _song.Value<int>("duration");
