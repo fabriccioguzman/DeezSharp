@@ -69,6 +69,11 @@ namespace DeezSharp
             return QueryTrack(id).Select(token => new DeezerSong(token));
         }
 
+	    public IEnumerable<DeezerSong> GetTracks(IEnumerable<DeezerSongLite> lite)
+	    {
+	        return QueryTrack(lite.Select(a => a.SongId).ToArray()).Select(token => new DeezerSong(token));
+	    }
+
         //TODO: rename to GetAlbum when DeezerSongLite is implemented
 	    public DeezerAlbum GetAlbumInfo(int albumId)
 	    {
