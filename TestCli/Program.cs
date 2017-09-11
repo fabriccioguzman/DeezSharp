@@ -1,5 +1,6 @@
 ﻿using System;
 using DeezSharp;
+using DeezSharp.Models;
 
 namespace TestCli
 {
@@ -29,7 +30,7 @@ namespace TestCli
 	            }
 	            case "album": {
 	                Console.WriteLine("Getting info from album...");
-	                DeezerAlbum a = d.GetAlbumInfo(SampleAlbum);
+	                DeezerAlbum a = d.GetAlbum(SampleAlbum);
 	                Console.WriteLine($"Album '{a.AlbumName}' has {a.AmountOfTracks} tracks, totalling {new TimeSpan(0, 0, a.TotalLength)} of listening joy!");
 	                Console.WriteLine("Getting full track info...");
 	                foreach (DeezerSong s in d.GetTracks(a.Tracks)) {

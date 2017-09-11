@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DeezSharp.Helpers;
+using DeezSharp.Models;
 
 namespace DeezSharp.Metadata
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using DeezSharp.Models;
 
 namespace DeezSharp.Helpers
 {

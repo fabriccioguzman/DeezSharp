@@ -46,9 +46,9 @@ namespace DeezSharp
 					break;
 			}
 
-		    byte[] id3v2 = new ID3v2Creator(s).GetAllBytes();
+		    byte[] id3Data = new ID3v2Creator(s).GetAllBytes();
             
-            byte[] data = id3v2.Concat(DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId)).ToArray();
+            byte[] data = id3Data.Concat(DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId)).ToArray();
             
 			if (!Directory.Exists(directory))
 				Directory.CreateDirectory(directory);
@@ -59,30 +59,29 @@ namespace DeezSharp
 
 	    public DeezerSong GetTrack(int id)
 	    {
-	        JToken token = QueryTrack(id).First();
-            Debug.Assert((int)token["SNG_ID"] == id);
-	        return new DeezerSong(token);
+	        var song = QueryTrack(id).First();
+            Debug.Assert(song.SongId == id);
+	        return song;
 	    }
 
         public IEnumerable<DeezerSong> GetTracks(int[] id)
         {
-            return QueryTrack(id).Select(token => new DeezerSong(token));
+            return QueryTrack(id);
         }
 
 	    public IEnumerable<DeezerSong> GetTracks(IEnumerable<DeezerSongLite> lite)
 	    {
-	        return QueryTrack(lite.Select(a => a.SongId).ToArray()).Select(token => new DeezerSong(token));
+	        return QueryTrack(lite.Select(a => a.SongId).ToArray());
 	    }
 
-        //TODO: rename to GetAlbum when DeezerSongLite is implemented
-	    public DeezerAlbum GetAlbumInfo(int albumId)
+	    public DeezerAlbum GetAlbum(int albumId)
 	    {
-	        JToken token = QueryAlbum(albumId);
-            Debug.Assert((int)token["id"] == albumId);
-            return new DeezerAlbum(token);
+	        DeezerAlbum album = QueryAlbum(albumId);
+            Debug.Assert(album.AlbumId == albumId);
+            return album;
 	    }
 
-		private IEnumerable<JToken> QueryTrack(params int[] id)
+		private IEnumerable<DeezerSong> QueryTrack(params int[] id)
 		{
 			var query = new DeezerMethodRequest
 			{
@@ -97,13 +96,14 @@ namespace DeezSharp
 			if (response["error"].HasValues)
 				throw new Exception("Deezer reported back an error. " + response["error"].First);
 
-		    return response["results"]["data"].Children();
+            //it is an absolute fucking pain to figure this out without StackOverflow
+		    return response["results"]["data"].ToObject<IEnumerable<DeezerSong>>();
 		}
 
-	    private JToken QueryAlbum(int id)
+	    private DeezerAlbum QueryAlbum(int id)
 	    {
 	        string responseString = Web.DownloadString($"{Constants.UrlPublicApi}/album/{id}");
-	        return JsonConvert.DeserializeObject<JToken>(responseString);
+	        return JsonConvert.DeserializeObject<DeezerAlbum>(responseString);
 	    }
 	}
 }
