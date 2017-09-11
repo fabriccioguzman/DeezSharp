@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
@@ -29,7 +30,7 @@ namespace DeezSharp
 
         //TODO: contributors[]
         //TODO: artist
-        //TODO: tracks (DeezerSongLite)
+        public IEnumerable<DeezerSongLite> Tracks => _album["tracks"]["data"].Children().Select(a => new DeezerSongLite(a));
 
         internal float Rating => _album.Value<float>("rating");     //prob not used anywhere
         internal bool Available => _album.Value<bool>("available"); //available isn't used by us
