@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using DeezSharp.Helpers;
+using DeezSharp.Metadata;
 using DeezSharp.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -44,12 +46,14 @@ namespace DeezSharp
 					break;
 			}
 
-			byte[] data = DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId);
-
+		    byte[] id3v2 = new ID3v2Creator(s).GetAllBytes();
+            
+            byte[] data = id3v2.Concat(DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId)).ToArray();
+            
 			if (!Directory.Exists(directory))
 				Directory.CreateDirectory(directory);
 
-			string path = Path.Combine(directory, $"{s.ArtistName} - {s.SongTitle}.{ext}");
+			string path = Path.Combine(directory, $"{s.ArtistName} - {$"{s.SongTitle} {s.Version}".TrimEnd(' ')}.{ext}");
 			File.WriteAllBytes(path, data);
 		}
 

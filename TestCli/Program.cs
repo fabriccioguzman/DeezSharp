@@ -7,6 +7,7 @@ namespace TestCli
     {
 	    private const string SampleUrl = "http://www.deezer.com/track/372123951";
 	    private const int SampleId = 372123951;
+        private const SongQuality Quality = SongQuality.MP3_128;
 
 	    private static void Main(string[] args)
 	    {
@@ -17,8 +18,8 @@ namespace TestCli
 			d.Init();
 	        Console.WriteLine("Getting track info...");
 			DeezerSong s = d.GetTrack(SampleId);
-		    Console.WriteLine("Downloading FLAC track...");
-			d.SaveTrack(s, ".", SongQuality.FLAC);
+		    Console.WriteLine($"Downloading {Quality} track...");
+			d.SaveTrack(s, ".", Quality);
         }
     }
 }
