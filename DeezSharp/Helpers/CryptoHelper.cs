@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -36,12 +36,12 @@ namespace DeezSharp.Helpers
 			if (iv == null || iv.Length == 0)
 				iv = new byte[16];
 
-		    using (var encr = aes.CreateEncryptor(key, iv)) {
-				byte[] buffer = new byte[input.Length];
-			    int l = encr.TransformBlock(input, 0, input.Length, buffer, 0);
-				Debug.Assert(l == buffer.Length);
-			    return buffer;
-		    }
+	        using (var encr = aes.CreateEncryptor(key, iv))
+	        using (var ms = new MemoryStream())
+	        using (var cs = new CryptoStream(ms, encr, CryptoStreamMode.Write)) {
+                cs.Write(input, 0, input.Length);
+	            return ms.ToArray();
+	        }
 	    }
 
 		public static byte[] DecryptBlowfishCbc(byte[] input, byte[] key, byte[] iv)
