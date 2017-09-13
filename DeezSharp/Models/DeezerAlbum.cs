@@ -29,7 +29,8 @@ namespace DeezSharp.Models
         [JsonProperty("explicit_lyrics")]
         public bool ExplicitLyrics { get; set; }
 
-        //TODO: contributors[]
+        [JsonProperty("contributors")]
+        public DeezerContributor[] Contributors { get; set; }
 
         [JsonProperty("artist")]
         public DeezerArtistBase Artist { get; set; }
