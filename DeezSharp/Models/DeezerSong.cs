@@ -58,6 +58,7 @@ namespace DeezSharp.Models
         [JsonProperty("TRACK_NUMBER")]
         public int TrackNumber { get; set; }
 
+
         [JsonProperty("MD5_ORIGIN")]
         internal string OriginMd5 { get; set; }
 

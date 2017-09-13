@@ -34,7 +34,7 @@ namespace TestCli
 	                Console.WriteLine($"Album '{a.AlbumName}' has {a.AmountOfTracks} tracks, totalling {new TimeSpan(0, 0, a.TotalLength)} of listening joy!");
 	                Console.WriteLine("Getting full track info...");
 	                foreach (DeezerSong s in d.GetTracks(a.Tracks)) {
-	                    Console.WriteLine($"[{Quality}] Downloading {s.ArtistName} - {s.SongTitle}...");
+	                    Console.WriteLine($"[{Quality}] Downloading '{s.ArtistName} - {s.SongTitle}'...");
 	                    d.SaveTrack(s, a.AlbumName, Quality);
 	                }
                     /*

@@ -44,7 +44,17 @@ namespace DeezSharp.Models
         [JsonProperty("alternative")]
         public DeezerSongLite Alternative { get; set; }
 
+        [JsonProperty("bpm")]
+        public int Bpm { get; set; }
+
+        [JsonProperty("gain")]
+        public float Gain { get; set; }
+
+        //TODO: contributors
+
         //TODO: artist
+
+        //TODO: album
 
         [JsonProperty("readable")]
         internal bool Readable { get; set; }    //may have to be made public
