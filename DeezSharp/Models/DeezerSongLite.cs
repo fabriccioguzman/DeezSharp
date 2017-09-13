@@ -52,9 +52,11 @@ namespace DeezSharp.Models
 
         //TODO: contributors
 
-        //TODO: artist
+        [JsonProperty("artist")]
+        public DeezerArtistBase Artist { get; set; }
 
-        //TODO: album
+        [JsonProperty("album")]
+        public DeezerAlbumBase Album { get; set; }
 
         [JsonProperty("readable")]
         internal bool Readable { get; set; }    //may have to be made public

@@ -30,7 +30,9 @@ namespace DeezSharp.Models
         public bool ExplicitLyrics { get; set; }
 
         //TODO: contributors[]
-        //TODO: artist
+
+        [JsonProperty("artist")]
+        public DeezerArtistBase Artist { get; set; }
         
         [JsonIgnore]
         public IEnumerable<DeezerSongLite> Tracks => _tracks.Tracks;
