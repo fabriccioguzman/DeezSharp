@@ -17,7 +17,8 @@ namespace DeezSharp.Models
         [JsonProperty("ALB_TITLE")]
         public string AlbumTitle { get; set; }
 
-        //TODO: artists[]
+        [JsonProperty("ARTISTS")]
+        public DeezerArtistX[] Artists { get; set; }
 
         [JsonProperty("ART_ID")]
         public int ArtistId { get; set; }
@@ -64,5 +65,8 @@ namespace DeezSharp.Models
 
         [JsonProperty("MEDIA_VERSION")]
         internal int MediaVersion { get; set; }
+
+        [JsonProperty("__TYPE__")]
+        internal string Type { get; set; }
     }
 }
