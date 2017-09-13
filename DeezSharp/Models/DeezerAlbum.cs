@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace DeezSharp.Models
@@ -8,8 +9,10 @@ namespace DeezSharp.Models
     {
         [JsonProperty("genre_id")]
         public int GenreId { get; set; }
-
-        //TODO: genre[]
+        
+        [JsonIgnore]
+        public DeezerGenreBase[] Genres => _genres.Genres.ToArray();
+        [JsonProperty("genres")] private GenresData _genres;
 
         [JsonProperty("label")]
         public string Label { get; set; }
@@ -36,7 +39,7 @@ namespace DeezSharp.Models
         public DeezerArtistBase Artist { get; set; }
         
         [JsonIgnore]
-        public IEnumerable<DeezerSong> Tracks => _tracks.Tracks;
+        public DeezerSong[] Tracks => _tracks.Tracks.ToArray();
         [JsonProperty("tracks")] private TracksData _tracks;
 
 
@@ -50,6 +53,11 @@ namespace DeezSharp.Models
         {
             [JsonProperty("data")]
             public IEnumerable<DeezerSong> Tracks { get; set; }
+        }
+        private class GenresData
+        {
+            [JsonProperty("data")]
+            public IEnumerable<DeezerGenreBase> Genres { get; set; }
         }
     }
 }
