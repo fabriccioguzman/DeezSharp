@@ -7,7 +7,7 @@ namespace DeezSharp.Helpers
     internal static class DeezerUtils
 	{
 
-		public static string GetDownloadUrl(DeezerSong s, SongQuality format) 
+		public static string GetDownloadUrl(DeezerSongX s, SongQuality format) 
 			=> GetDownloadUrl(s.OriginMd5, s.SongId, s.MediaVersion, (int)format);
 
 		public static string GetDownloadUrl(string md5Origin, int id, int mediaVersion, int format)

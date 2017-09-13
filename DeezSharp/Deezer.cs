@@ -29,7 +29,7 @@ namespace DeezSharp
 			_token = m.Groups[1].Value;
 		}
 
-		public void SaveTrack(DeezerSong s, string directory, SongQuality quality = SongQuality.MP3_320)
+		public void SaveTrack(DeezerSongX s, string directory, SongQuality quality = SongQuality.MP3_320)
 		{
 			string ext;
 			switch (quality) {
@@ -57,19 +57,19 @@ namespace DeezSharp
 			File.WriteAllBytes(path, data);
 	    }
 
-	    public DeezerSong GetTrack(int id)
+	    public DeezerSongX GetTrack(int id)
 	    {
 	        var song = QueryTrack(id).First();
             Debug.Assert(song.SongId == id);
 	        return song;
 	    }
 
-        public IEnumerable<DeezerSong> GetTracks(int[] id)
+        public IEnumerable<DeezerSongX> GetTracks(int[] id)
         {
             return QueryTrack(id);
         }
 
-	    public IEnumerable<DeezerSong> GetTracks(IEnumerable<DeezerSongLite> lite)
+	    public IEnumerable<DeezerSongX> GetTracks(IEnumerable<DeezerSong> lite)
 	    {
 	        return QueryTrack(lite.Select(a => a.SongId).ToArray());
 	    }
@@ -81,7 +81,7 @@ namespace DeezSharp
             return album;
 	    }
 
-		private IEnumerable<DeezerSong> QueryTrack(params int[] id)
+		private IEnumerable<DeezerSongX> QueryTrack(params int[] id)
 		{
 			var query = new DeezerMethodRequest
 			{
@@ -97,7 +97,7 @@ namespace DeezSharp
 				throw new Exception("Deezer reported back an error. " + response["error"].First);
 
             //it is an absolute fucking pain to figure this out without StackOverflow
-		    return response["results"]["data"].ToObject<IEnumerable<DeezerSong>>();
+		    return response["results"]["data"].ToObject<IEnumerable<DeezerSongX>>();
 		}
 
 	    private DeezerAlbum QueryAlbum(int id)

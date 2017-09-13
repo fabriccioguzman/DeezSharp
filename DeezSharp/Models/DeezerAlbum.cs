@@ -35,7 +35,7 @@ namespace DeezSharp.Models
         public DeezerArtistBase Artist { get; set; }
         
         [JsonIgnore]
-        public IEnumerable<DeezerSongLite> Tracks => _tracks.Tracks;
+        public IEnumerable<DeezerSong> Tracks => _tracks.Tracks;
         [JsonProperty("tracks")] private TracksData _tracks;
 
 
@@ -48,7 +48,7 @@ namespace DeezSharp.Models
         private class TracksData
         {
             [JsonProperty("data")]
-            public IEnumerable<DeezerSongLite> Tracks { get; set; }
+            public IEnumerable<DeezerSong> Tracks { get; set; }
         }
     }
 }

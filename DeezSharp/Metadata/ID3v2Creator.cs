@@ -15,7 +15,7 @@ namespace DeezSharp.Metadata
         public Dictionary<string, FrameBase> Frames = new Dictionary<string, FrameBase>();
         
         //because lazy
-	    public ID3v2Creator(DeezerSong s)
+	    public ID3v2Creator(DeezerSongX s)
 	    {
             //basic metadata
 	        Frames["TIT2"] = new FrameString($"{s.SongTitle} {s.Version}".TrimEnd(' '));

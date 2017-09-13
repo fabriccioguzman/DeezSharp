@@ -5,64 +5,63 @@ namespace DeezSharp.Models
 {
     public class DeezerSong
     {
-        [JsonProperty("SNG_ID")]
+        [JsonProperty("id")]
         public int SongId { get; set; }
 
-        [JsonProperty("ALB_ID")]
-        public int AlbumId { get; set; }
-
-        [JsonProperty("ALB_PICTURE")]
-        public string AlbumPicture { get; set; }
-
-        [JsonProperty("ALB_TITLE")]
-        public string AlbumTitle { get; set; }
-
-        //TODO: artists[]
-
-        [JsonProperty("ART_ID")]
-        public int ArtistId { get; set; }
-
-        [JsonProperty("ART_NAME")]
-        public string ArtistName { get; set; }
-
-        [JsonProperty("SNG_TITLE")]
+        [JsonProperty("title")]
         public string SongTitle { get; set; }
 
-        [JsonProperty("VERSION")]
-        public string Version { get; set; }
+        [JsonProperty("title_short")]
+        public string SongTitleShort { get; set; }  //title minus version
 
-        [JsonProperty("BPM")]
-        public float Bpm { get; set; }
+        [JsonProperty("title_version")]
+        public string SongTitleVersion { get; set; }//title minus actual title
 
-        [JsonProperty("DISK_NUMBER")]
-        public int DiskNumber { get; set; }
+        [JsonProperty("isrc")]
+        public string ISRC { get; set; }
 
-        [JsonProperty("DURATION")]
+        [JsonProperty("link")]
+        public string Link { get; set; }
+
+        [JsonProperty("duration")]
         public int Duration { get; set; }
 
-        [JsonProperty("GAIN")]
+        [JsonProperty("track_position")]
+        public int TrackPosition { get; set; }
+
+        [JsonProperty("disk_number")]
+        public int DiskNumber { get; set; }
+
+        [JsonProperty("rank")]
+        public int Rank { get; set; }
+
+        [JsonProperty("explicit_lyrics")]
+        public bool ExplicitLyrics { get; set; }
+
+        [JsonProperty("preview")]
+        public string PreviewUrl { get; set; }
+
+        [JsonProperty("alternative")]
+        public DeezerSong Alternative { get; set; }
+
+        [JsonProperty("bpm")]
+        public int Bpm { get; set; }
+
+        [JsonProperty("gain")]
         public float Gain { get; set; }
 
-        [JsonProperty("GENRE_ID")]
-        public int GenreId { get; set; }
+        //TODO: contributors
 
-        [JsonProperty("DIGITAL_RELEASE_DATE")]
-        public DateTime ReleaseDateDigital { get; set; }
+        [JsonProperty("artist")]
+        public DeezerArtistBase Artist { get; set; }
 
-        [JsonProperty("PHYSICAL_RELEASE_DATE")]
-        public DateTime ReleaseDatePhysical { get; set; }
+        [JsonProperty("album")]
+        public DeezerAlbumBase Album { get; set; }
 
-        [JsonProperty("RANK_SNG")]
-        public int SongRank { get; set; }
+        [JsonProperty("readable")]
+        internal bool Readable { get; set; }    //may have to be made public
 
-        [JsonProperty("TRACK_NUMBER")]
-        public int TrackNumber { get; set; }
-
-
-        [JsonProperty("MD5_ORIGIN")]
-        internal string OriginMd5 { get; set; }
-
-        [JsonProperty("MEDIA_VERSION")]
-        internal int MediaVersion { get; set; }
+        [JsonProperty("track")]
+        internal string Type { get; set; }
     }
 }

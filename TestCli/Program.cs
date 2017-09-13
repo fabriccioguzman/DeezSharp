@@ -23,7 +23,7 @@ namespace TestCli
 	        switch (Action) {
 	            case "song": {
 	                Console.WriteLine("Getting track info...");
-	                DeezerSong s = d.GetTrack(SampleSong);
+	                DeezerSongX s = d.GetTrack(SampleSong);
 	                Console.WriteLine($"Downloading {Quality} track...");
 	                d.SaveTrack(s, ".", Quality);
 	                break;
@@ -33,12 +33,12 @@ namespace TestCli
 	                DeezerAlbum a = d.GetAlbum(SampleAlbum);
 	                Console.WriteLine($"Album '{a.AlbumName}' has {a.AmountOfTracks} tracks, totalling {new TimeSpan(0, 0, a.TotalLength)} of listening joy!");
 	                Console.WriteLine("Getting full track info...");
-	                foreach (DeezerSong s in d.GetTracks(a.Tracks)) {
+	                foreach (DeezerSongX s in d.GetTracks(a.Tracks)) {
 	                    Console.WriteLine($"[{Quality}] Downloading '{s.ArtistName} - {s.SongTitle}'...");
 	                    d.SaveTrack(s, a.AlbumName, Quality);
 	                }
                     /*
-                    foreach (DeezerSong song in d.GetAlbumTracks(SampleAlbum)) {
+                    foreach (DeezerSongX song in d.GetAlbumTracks(SampleAlbum)) {
 	                    Console.Write($"[{song.TrackNumber.ToString().PadLeft(2)}] Downloading track \"{song.SongTitle}\" at quality {Quality}...");
                         d.SaveTrack(song, "album", Quality);
 	                }*/
