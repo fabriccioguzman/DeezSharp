@@ -85,6 +85,11 @@ namespace DeezSharp
             return album;
 	    }
 
+	    public IEnumerable<DeezerSong> SearchSongs(string query)
+	    {
+	        return DoSearchSimple(query);
+	    }
+
 		private IEnumerable<DeezerSongX> QueryTrack(params int[] id)
 		{
 			var query = new DeezerMethodRequest
@@ -109,5 +114,16 @@ namespace DeezSharp
 	        string responseString = Web.DownloadString($"{Constants.UrlPublicApi}/album/{id}");
 	        return JsonConvert.DeserializeObject<DeezerAlbum>(responseString);
 	    }
+
+	    private IEnumerable<DeezerSong> DoSearchSimple(string param)
+	    {
+	        string responseString = Web.DownloadString($"{Constants.UrlPublicApi}/search/?q={WebUtility.UrlEncode(param)}");
+	        var response = JsonConvert.DeserializeObject<JToken>(responseString);
+
+	        if (response["error"]?.HasValues == true)
+	            throw new Exception("Deezer reported back an error. " + response["error"].First);
+            
+            return response["data"].ToObject<IEnumerable<DeezerSong>>();
+        }
 	}
 }

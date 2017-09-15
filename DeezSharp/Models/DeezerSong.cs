@@ -18,7 +18,7 @@ namespace DeezSharp.Models
         public string SongTitleVersion { get; set; }//title minus actual title
 
         [JsonProperty("isrc")]
-        public string ISRC { get; set; }
+        public string ISRC { get; set; }        //not set in search
 
         [JsonProperty("link")]
         public string Link { get; set; }
@@ -27,10 +27,10 @@ namespace DeezSharp.Models
         public int Duration { get; set; }
 
         [JsonProperty("track_position")]
-        public int TrackPosition { get; set; }
+        public int? TrackPosition { get; set; } //not set in search
 
         [JsonProperty("disk_number")]
-        public int DiskNumber { get; set; }
+        public int? DiskNumber { get; set; }    //not set in search
 
         [JsonProperty("rank")]
         public int Rank { get; set; }
@@ -42,13 +42,13 @@ namespace DeezSharp.Models
         public string PreviewUrl { get; set; }
 
         [JsonProperty("alternative")]
-        public DeezerSong Alternative { get; set; }
+        public DeezerSong Alternative { get; set; } //not set in search
 
         [JsonProperty("bpm")]
-        public int Bpm { get; set; }
+        public int? Bpm { get; set; }               //not set in search
 
         [JsonProperty("gain")]
-        public float Gain { get; set; }
+        public float? Gain { get; set; }            //not set in search
 
         [JsonProperty("contributors")]
         public DeezerContributor[] Contributors { get; set; }

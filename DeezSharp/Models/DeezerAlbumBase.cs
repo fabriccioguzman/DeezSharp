@@ -12,7 +12,7 @@ namespace DeezSharp.Models
         public string AlbumName { get; set; }
 
         [JsonProperty("link")]
-        public string AlbumLink { get; set; }
+        public string AlbumLink { get; set; }       //not set in search
 
         [JsonProperty("cover")]
         public string LinkCover { get; set; }
@@ -30,13 +30,13 @@ namespace DeezSharp.Models
         public string LinkCoverXl { get; set; }
 
         [JsonProperty("release_date")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }  //not set in search
 
 
         [JsonProperty("tracklist")]
-        internal string TrackListUrl { get; set; }  //we could use this, but `tracks` already provides this info
+        internal string TrackListUrl { get; set; }
 
         [JsonProperty("type")]
-        internal string Type { get; set; }      //unused
+        internal string Type { get; set; }
     }
 }

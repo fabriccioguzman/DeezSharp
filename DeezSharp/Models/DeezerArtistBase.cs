@@ -31,10 +31,10 @@ namespace DeezSharp.Models
 
 
         [JsonProperty("share")]
-        internal string LinkShare { get; set; }
+        internal string LinkShare { get; set; } //not set in search
 
         [JsonProperty("radio")]
-        internal bool Radio { get; set; }
+        internal bool? Radio { get; set; }      //not set in search
 
         [JsonProperty("tracklist")]
         internal string TrackList { get; set; }

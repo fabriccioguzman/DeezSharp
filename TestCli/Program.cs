@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeezSharp;
 using DeezSharp.Models;
 
@@ -9,9 +10,10 @@ namespace TestCli
     {
 	    private const int SampleSong = 372123951;
         private const int SampleAlbum = 15218775;
+        private const string SearchQuery = "Da Tweekaz";
         private const SongQuality Quality = SongQuality.MP3_128;
 
-        private const string Action = "album";
+        private const string Action = "search";
 
 	    private static void Main(string[] args)
 	    {
@@ -45,11 +47,43 @@ namespace TestCli
 	                }
                     break;
 	            }
-	        }
-	        Console.WriteLine("Done!");
+	            case "search": {
+	                Console.WriteLine("Searching...");
+	                DeezerSong[] tracks = d.SearchSongs(SearchQuery).ToArray(); //will be enumerated more than once
 
+	                if (tracks.Length == 0) {
+	                    Console.WriteLine("No results found.");
+	                    break;
+	                }
+
+	                const string headerTrackId = "Trk. ID";
+	                const string headerAlbumId = "Alb. ID";
+	                const string headerArtistId = "Art. ID";
+	                const string headerTrack = "Full Name";
+
+                    int lenTrackId =  Math.Max(tracks.Max(a => a.SongId.ToString().Length), headerTrack.Length);
+	                int lenAlbumId =  Math.Max(tracks.Max(a => a.Album.AlbumId.ToString().Length), headerAlbumId.Length);
+	                int lenArtistId = Math.Max(tracks.Max(a => a.Artist.ArtistId.ToString().Length), headerArtistId.Length);
+	                int lenTrack =    Math.Max(tracks.Max(a => $"{a.Artist.ArtistName} - {a.SongTitle}".ToString().Length), headerTrack.Length);
+
+                    Console.WriteLine($"|{headerTrackId.PadRight(lenTrackId)}" +
+                                      $"|{headerAlbumId.PadRight(lenAlbumId)}" +
+                                      $"|{headerArtistId.PadRight(lenArtistId)}" +
+                                      $"|{headerTrack.PadRight(lenTrack)}|");
+	                Console.WriteLine($"|{new string('-', lenTrackId)}|{new string('-', lenAlbumId)}|{new string('-', lenArtistId)}|{new string('-', lenTrack)}|");
+                    foreach (var t in tracks) {
+	                    Console.WriteLine($"|{t.SongId.ToString().PadLeft(lenTrackId)}" +
+	                                      $"|{t.Album.AlbumId.ToString().PadLeft(lenAlbumId)}" +
+	                                      $"|{t.Artist.ArtistId.ToString().PadLeft(lenArtistId)}" +
+	                                      $"|{$"{t.Artist.ArtistName} - {t.SongTitle}".PadRight(lenTrack)}|");
+	                }
+	                Console.WriteLine($"|{new string('-', lenTrackId)}|{new string('-', lenAlbumId)}|{new string('-', lenArtistId)}|{new string('-', lenTrack)}|");
+                    break;
+	            }
+	        }
 #if DEBUG
-	        Console.Read();
+	        Console.WriteLine("Done!");
+            Console.Read();
 #endif
 	    }
     }
