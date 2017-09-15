@@ -46,11 +46,15 @@ namespace DeezSharp
 					break;
 			}
 
-		    byte[] id3Data = new ID3v2Creator(s, a).GetAllBytes();
+		    byte[] data = DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId);
             
-            byte[] data = id3Data.Concat(DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId)).ToArray();
-            
-			if (!Directory.Exists(directory))
+            if (quality == SongQuality.MP3_128 || quality == SongQuality.MP3_320) { 
+                byte[] id3Data = new ID3v2Creator(s, a).GetAllBytes();
+                data = id3Data.Concat(data).ToArray();
+            }
+            //TODO: Vorbis tags for FLAC
+
+            if (!Directory.Exists(directory))
 				Directory.CreateDirectory(directory);
 
 			string path = Path.Combine(directory, $"{s.ArtistName} - {$"{s.SongTitle} {s.Version}".TrimEnd(' ')}.{ext}");
