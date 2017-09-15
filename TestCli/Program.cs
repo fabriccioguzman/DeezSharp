@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DeezSharp;
 using DeezSharp.Models;
 
@@ -32,16 +33,16 @@ namespace TestCli
 	                Console.WriteLine("Getting info from album...");
 	                DeezerAlbum a = d.GetAlbum(SampleAlbum);
 	                Console.WriteLine($"Album '{a.AlbumName}' has {a.AmountOfTracks} tracks, totalling {new TimeSpan(0, 0, a.TotalLength)} of listening joy!");
+
 	                Console.WriteLine("Getting full track info...");
-	                foreach (DeezerSongX s in d.GetTracks(a.Tracks)) {
-	                    Console.WriteLine($"[{Quality}] Downloading '{s.ArtistName} - {s.SongTitle}'...");
+	                IEnumerable<DeezerSongX> tracks = d.GetTracks(a.Tracks);
+	                Console.WriteLine($"Will download with quality {Quality}.");
+
+                    foreach (DeezerSongX s in tracks) {
+	                    Console.WriteLine($"[{s.TrackNumber.ToString().PadLeft(a.AmountOfTracks.ToString().Length)}/" +
+	                                      $"{a.AmountOfTracks}] Downloading '{s.ArtistName} - {s.SongTitle}'...");
 	                    d.SaveTrack(s, a.AlbumName, Quality);
 	                }
-                    /*
-                    foreach (DeezerSongX song in d.GetAlbumTracks(SampleAlbum)) {
-	                    Console.Write($"[{song.TrackNumber.ToString().PadLeft(2)}] Downloading track \"{song.SongTitle}\" at quality {Quality}...");
-                        d.SaveTrack(song, "album", Quality);
-	                }*/
                     break;
 	            }
 	        }
