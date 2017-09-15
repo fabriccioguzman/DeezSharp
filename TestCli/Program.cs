@@ -41,7 +41,7 @@ namespace TestCli
                     foreach (DeezerSongX s in tracks) {
 	                    Console.WriteLine($"[{s.TrackNumber.ToString().PadLeft(a.AmountOfTracks.ToString().Length)}/" +
 	                                      $"{a.AmountOfTracks}] Downloading '{s.ArtistName} - {s.SongTitle}'...");
-	                    d.SaveTrack(s, a.AlbumName, Quality);
+	                    d.SaveTrack(s, a.AlbumName, Quality, a);
 	                }
                     break;
 	            }

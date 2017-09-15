@@ -15,12 +15,14 @@ namespace DeezSharp.Metadata
         public Dictionary<string, FrameBase> Frames = new Dictionary<string, FrameBase>();
         
         //because lazy
-	    public ID3v2Creator(DeezerSongX s)
+	    public ID3v2Creator(DeezerSongX s, DeezerAlbum a = null)
 	    {
             //basic metadata
 	        Frames["TIT2"] = new FrameString($"{s.SongTitle} {s.Version}".TrimEnd(' '));
 	        Frames["TPE1"] = new FrameString(s.ArtistName);
             Frames["TALB"] = new FrameString(s.AlbumTitle);
+            if (a != null)
+                Frames["TPUB"] = new FrameString(a.Label);
 
             //original artist/song name
 	        Frames["TOAL"] = new FrameString(s.SongTitle);
@@ -28,19 +30,23 @@ namespace DeezSharp.Metadata
 
             //others
             Frames["TBPM"] = new FrameStringSimple(((int)s.Bpm).ToString());
-	        Frames["TRCK"] = new FrameStringSimple(s.TrackNumber.ToString());
+	        Frames["TRCK"] = new FrameStringSimple(a == null 
+                ? s.TrackNumber.ToString()
+                : $"{s.TrackNumber}/{a.AmountOfTracks}");
+            Frames["TENC"] = new FrameStringSimple("Deezer");
 
             //release date
 	        Frames["TRDA"] = new FrameStringSimple($"{s.ReleaseDatePhysical}");
             Frames["TDAT"] = new FrameStringSimple($"{s.ReleaseDatePhysical.Day:00}{s.ReleaseDatePhysical.Month:00}");
 	        Frames["TYER"] = new FrameStringSimple($"{s.ReleaseDatePhysical.Year:0000}");
 
-            //TODO: TCON
-            //TODO: TPE4
-            //TODO: W* (eg. WOAF)
+            //links
+	        Frames["WOAF"] = new FrameStringSimple($"https://www.deezer.com/track/{s.SongId}");
+            Frames["WCOM"] = new FrameStringSimple($"https://www.deezer.com/album/{s.AlbumId}");
+	        Frames["WOAR"] = new FrameStringSimple($"https://www.deezer.com/artist/{s.ArtistId}");
+
+            //TODO: TPE4 (remixer, if any)
             //TODO: album art (A*)
-            //TODO: POPM using log(rank)/log(totalrank)? :)
-            //TODO: find genres
         }
 
         public byte[] GetAllBytes()

@@ -29,7 +29,7 @@ namespace DeezSharp
 			_token = m.Groups[1].Value;
 		}
 
-		public void SaveTrack(DeezerSongX s, string directory, SongQuality quality = SongQuality.MP3_320)
+		public void SaveTrack(DeezerSongX s, string directory, SongQuality quality = SongQuality.MP3_320, DeezerAlbum a = null)
 		{
 			string ext;
 			switch (quality) {
@@ -46,7 +46,7 @@ namespace DeezSharp
 					break;
 			}
 
-		    byte[] id3Data = new ID3v2Creator(s).GetAllBytes();
+		    byte[] id3Data = new ID3v2Creator(s, a).GetAllBytes();
             
             byte[] data = id3Data.Concat(DeezerUtils.DecryptSongData(Web.DownloadData(DeezerUtils.GetDownloadUrl(s, quality)), s.SongId)).ToArray();
             
